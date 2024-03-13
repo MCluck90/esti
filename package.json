@@ -1,0 +1,22 @@
+{
+  "name": "esti",
+  "version": "1.0.0",
+  "description": "Quickly estimate projects",
+  "scripts": {
+    "start": "node ./build/main.js",
+    "build": "esbuild src/main.ts --bundle --platform=node --target=node20.5 --outdir=build",
+    "dev": "npm --silent run build && npm --silent start",
+    "test": "jest"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.27",
+    "esbuild": "^0.20.1",
+    "jest": "^29.7.0",
+    "prettier": "^3.2.5",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.2"
+  }
+}
