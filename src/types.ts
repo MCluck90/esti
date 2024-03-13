@@ -38,3 +38,13 @@ export interface Task {
   anyOf: Set<string>
   blockedBy: Set<string>
 }
+
+export type Result<T, E> = { ok: true; value: T } | { ok: false; error: E }
+export const Result = {
+  Ok<T>(value: T): Result<T, never> {
+    return { ok: true, value }
+  },
+  Err<E>(error: E): Result<never, E> {
+    return { ok: false, error }
+  },
+}

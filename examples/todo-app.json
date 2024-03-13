@@ -15,7 +15,8 @@
     "TODO-0001": {
       "title": "Create an empty repository",
       "days": 0,
-      "anyOf": ["Frontend", "Backend"]
+      "anyOf": ["Frontend", "Backend"],
+      "blockedBy": []
     },
     "TODO-0002": {
       "title": "Create scaffolding for the frontend",
