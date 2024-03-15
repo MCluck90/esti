@@ -1,12 +1,94 @@
 # esti
 
-Quickly estimate projects
+Quickly estimate projects. Given a project specification, it will give you a solution to assigning work and an estimated
+total time to execute the project.
 
 ## Getting Started
 
 ```sh
 git clone https://github.com/MCluck90/esti
+cd esti
 npm install
 npm run build
 npm start examples/todo-app.json
+```
+
+## Creating a Project
+
+For the most up-to-date information, check out [the examples](./examples/).
+
+A minimal project can be written like this:
+
+```json
+{
+  "title": "My Project",
+  "resources": {
+    "Me": {
+      "tags": ["Some tag"]
+    }
+  },
+  "tasks": {
+    "Task ID": {
+      "title": "Name of the task",
+      "days": 1,
+      "anyOf": ["Some tag"],
+      "blockedBy": []
+    }
+  }
+}
+```
+
+### Assigning Resources
+
+All resources must have a list of tags. These tags are used to determine which tasks they can be assigned to.
+In this example, Joe will be assigned to `TASK-0` and Jane will be assigned to `TASK-1`.
+
+```json
+{
+  // ...
+  "resources": {
+    "Joe": {
+      "tags": ["Frontend"]
+    },
+    "Jane": {
+      "tags": ["Backend"]
+    }
+  },
+  "tasks": {
+    "TASK-0": {
+      // ...
+      "anyOf": ["Frontend"]
+    },
+    "TASK-1": {
+      // ...
+      "anyOf": ["Backend"]
+    }
+  }
+}
+```
+
+### Dependencies
+
+To ensure that some tasks are completed before others, you can say that a task is `blockedBy` any other tasks.
+In this example, `TASK-1` and `TASK-2` can be started immediately but `TASK-3` cannot start until both of them are
+completed.
+
+```json
+{
+  // ...
+  "tasks": {
+    "TASK-1": {
+      // ...
+      "blockedBy": []
+    },
+    "TASK-2": {
+      // ...
+      "blockedBy": []
+    },
+    "TASK-3": {
+      // ...
+      "blockedBy": ["TASK-1", "TASK-2"]
+    }
+  }
+}
 ```
