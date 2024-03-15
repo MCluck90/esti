@@ -15,21 +15,34 @@ export const assignResourcesToTasks = (project: Project): AssignmentResult => {
 
   let totalProjectLength = 0
   while (unassigned.size > 0 || resourceCooldown.size > 0) {
+    // TODO: This is super dumb. Actually calculate length intelligently
+    let foundZeroDay = false
+    let onlyFoundZeroDay = true
+
     for (const resource of availableResources) {
       for (const task of unassigned) {
         if (setContainsAtLeastOne(task.anyOf, resource.tags)) {
           task.assigned = resource
           unassigned.delete(task)
+
           if (task.days > 0) {
+            onlyFoundZeroDay = false
             availableResources.delete(resource)
             resourceCooldown.set(resource.id, [resource, task, task.days])
+          } else {
+            foundZeroDay = true
+            for (const dependencyId of task.blocks) {
+              unassigned.add(project.tasks.get(dependencyId))
+            }
           }
           break
         }
       }
     }
 
-    totalProjectLength++
+    if (!foundZeroDay || !onlyFoundZeroDay) {
+      totalProjectLength++
+    }
 
     for (const [resource, task, cooldown] of resourceCooldown.values()) {
       const newCooldown = cooldown - 1

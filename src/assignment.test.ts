@@ -174,4 +174,34 @@ describe('assignResourcesToTasks', () => {
     expect(taskC.assigned).toBe(resourceB)
     expect(result.totalProjectLength).toBe(3)
   })
+
+  it('handles having tasks with 0 days', () => {
+    const taskA: Task = {
+      id: 'T-A',
+      title: 'T-A',
+      days: 0,
+      anyOf: new Set(['tag']),
+      blockedBy: new Set(),
+      blocks: new Set(),
+      assigned: null,
+    }
+    const taskB: Task = {
+      id: 'T-B',
+      title: 'T-B',
+      days: 2,
+      anyOf: new Set(['tag']),
+      blockedBy: new Set(['T-A']),
+      blocks: new Set(),
+      assigned: null,
+    }
+    const resourceA: Resource = { id: 'R-A', tags: new Set(['tag']) }
+
+    const result = assignResourcesToTasks(
+      createProject([taskA, taskB], [resourceA]),
+    )
+
+    expect(taskA.assigned).toBe(resourceA)
+    expect(taskB.assigned).toBe(resourceA)
+    expect(result.totalProjectLength).toBe(2)
+  })
 })

@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { ProjectConfig, Resource, Task } from './types'
 import { parseConfig } from './parse'
+import { assignResourcesToTasks } from './assignment'
 
 const filePath = process.argv[2]
 if (!filePath) {
@@ -18,10 +19,15 @@ if (!result.ok) {
 }
 
 const project = result.value
-const availableResources = new Set<Resource>()
-const resourceCooldown = new Map<string, [Resource, number]>()
-const unassigned = new Set<Task>(
-  Array.from(project.tasks.values()).filter(
-    (task) => task.blockedBy.size === 0,
-  ),
-)
+const { totalProjectLength } = assignResourcesToTasks(project)
+
+console.log(project.title)
+console.log('Total Days:', totalProjectLength)
+console.log('\nAssignments:')
+for (const task of project.tasks.values()) {
+  if (task.assigned === null) {
+    console.error(`[ERROR] No resource assigned to ${task.id}`)
+  } else {
+    console.log(task.id, '=', task.assigned.id)
+  }
+}
