@@ -45,7 +45,7 @@ In this example, Joe will be assigned to `TASK-0` and Jane will be assigned to `
 
 ```json
 {
-  // ...
+  "//": "...",
   "resources": {
     "Joe": {
       "tags": ["Frontend"]
@@ -56,12 +56,35 @@ In this example, Joe will be assigned to `TASK-0` and Jane will be assigned to `
   },
   "tasks": {
     "TASK-0": {
-      // ...
+      "//": "...",
       "anyOf": ["Frontend"]
     },
     "TASK-1": {
-      // ...
+      "//": "...",
       "anyOf": ["Backend"]
+    }
+  }
+}
+```
+
+If a task has multiple tags in `anyOf` then it will give the task to a resource that contains at least one of those tags.
+Here, either Joe or Jane may get assigned the task.
+
+```json
+{
+  "//": "...",
+  "resources": {
+    "Joe": {
+      "tags": ["Frontend"]
+    },
+    "Jane": {
+      "tags": ["Backend"]
+    }
+  },
+  "tasks": {
+    "TASK-0": {
+      "//": "...",
+      "anyOf": ["Frontend", "Backend"]
     }
   }
 }
@@ -75,18 +98,18 @@ completed.
 
 ```json
 {
-  // ...
+  "//": "...",
   "tasks": {
     "TASK-1": {
-      // ...
+      "//": "...",
       "blockedBy": []
     },
     "TASK-2": {
-      // ...
+      "//": "...",
       "blockedBy": []
     },
     "TASK-3": {
-      // ...
+      "//": "...",
       "blockedBy": ["TASK-1", "TASK-2"]
     }
   }
