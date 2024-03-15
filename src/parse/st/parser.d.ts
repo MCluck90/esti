@@ -44,5 +44,7 @@ export interface Span {
 }
 
 export const StartRules: ['Project']
-export class SyntaxError extends Error {}
+export class SyntaxError extends Error {
+  public readonly location: Location
+}
 export function parse(input: string): SyntaxError | STProject

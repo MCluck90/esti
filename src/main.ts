@@ -4,6 +4,7 @@ import { ProjectConfig } from './types'
 import { SemanticError, parseConfig, parseST } from './parse'
 import { assignResourcesToTasks } from './assignment'
 import { toGraphvizDOT, toGraphvizIR } from './graphviz'
+import { SyntaxError } from './parse/st/parser'
 
 const fileArg = process.argv[2]
 if (!fileArg) {
@@ -22,7 +23,7 @@ function runFromSTFile(stFilePath: string) {
   const result = parseST(source)
   if (!result.ok) {
     for (const error of result.error) {
-      if (error instanceof SemanticError) {
+      if (error instanceof SemanticError || error instanceof SyntaxError) {
         console.log(
           `${stFilePath}:${error.location.start.line}:${error.location.start.column}: ${error.message}`,
         )

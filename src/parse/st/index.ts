@@ -26,7 +26,13 @@ export class SemanticError extends Error {
 }
 
 export const parseST = (input: string): Result<ProjectConfig, Error[]> => {
-  const parsedProject = parse(input)
+  let parsedProject
+  try {
+    parsedProject = parse(input)
+  } catch (error) {
+    return Result.Err([error])
+  }
+
   if (parsedProject instanceof SyntaxError) {
     return Result.Err([parsedProject])
   }
@@ -189,6 +195,10 @@ const parseSTTask = (
   } else if (typeof titleAttr.value !== 'string') {
     errors.push(
       new SemanticError('"title" must be a string', titleAttr.location),
+    )
+  } else if (!titleAttr.value) {
+    errors.push(
+      new SemanticError('"title" must not be empty', titleAttr.location),
     )
   } else {
     task.title = titleAttr.value

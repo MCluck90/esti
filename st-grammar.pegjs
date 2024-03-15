@@ -8,7 +8,7 @@ Project
   }
 
 TitleAttribute "title attribute"
-  = type:"title" _ ":" _ value:String _ NL { return { type, value }; }
+  = type:"title" _ ":" _ value:String _ NL { return { type, value, location: location() }; }
 
 ResourceOrTask
   = element:(Resource / Task) _ { return element; }
@@ -63,19 +63,18 @@ NestedTask
     }
   }
 
-Value = StringList / Integer
-String
+String "a string"
   = "`" characters:[^`\r\n]* "`" { return characters.join(''); }
   / characters:[^,\r\n ]+ { return characters.join(''); }
-StringList
+StringList "a list of strings"
   = start:String elements:("," _ el:StringList { return el })? {
     return !elements ? [start]
       : [start, Array.isArray(elements) ? elements.flat() : elements].flat();
   }
-Integer 
+Integer "an integer"
   = "0" { return 0 }
   / first:[1-9]+ second:[0-9]* { return Number(first + (second ?? ''))}
 
-_ = [ \t]*
+_ "whitespace" = [ \t]*
 __ = "//" [^\n]* __ / [ \t\r\n]*
 NL = "\r"? "\n"
