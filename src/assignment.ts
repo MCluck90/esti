@@ -23,6 +23,7 @@ export const assignResourcesToTasks = (project: Project): AssignmentResult => {
       for (const task of unassigned) {
         if (setContainsAtLeastOne(task.anyOf, resource.tags)) {
           task.assigned = resource
+          task.startOffset = totalProjectLength
           unassigned.delete(task)
 
           if (task.days > 0) {

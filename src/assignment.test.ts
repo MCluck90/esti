@@ -29,6 +29,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-A',
       title: 'T-A',
       days: 1,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(),
       blocks: new Set(),
@@ -47,6 +48,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-A',
       title: 'T-A',
       days: 1,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(),
       blocks: new Set(),
@@ -56,6 +58,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-B',
       title: 'T-B',
       days: 2,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(),
       blocks: new Set(),
@@ -77,6 +80,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-A',
       title: 'T-A',
       days: 1,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(),
       blocks: new Set(),
@@ -86,6 +90,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-B',
       title: 'T-B',
       days: 2,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(),
       blocks: new Set(),
@@ -108,6 +113,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-A',
       title: 'T-A',
       days: 1,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(),
       blocks: new Set(),
@@ -117,6 +123,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-B',
       title: 'T-B',
       days: 2,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(['T-A']),
       blocks: new Set(),
@@ -139,6 +146,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-A',
       title: 'T-A',
       days: 1,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(),
       blocks: new Set(),
@@ -148,6 +156,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-B',
       title: 'T-B',
       days: 2,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(['T-A']),
       blocks: new Set(),
@@ -157,6 +166,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-C',
       title: 'T-C',
       days: 2,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(),
       blocks: new Set(),
@@ -180,6 +190,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-A',
       title: 'T-A',
       days: 0,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(),
       blocks: new Set(),
@@ -189,6 +200,7 @@ describe('assignResourcesToTasks', () => {
       id: 'T-B',
       title: 'T-B',
       days: 2,
+      startOffset: 0,
       anyOf: new Set(['tag']),
       blockedBy: new Set(['T-A']),
       blocks: new Set(),
@@ -203,5 +215,38 @@ describe('assignResourcesToTasks', () => {
     expect(taskA.assigned).toBe(resourceA)
     expect(taskB.assigned).toBe(resourceA)
     expect(result.totalProjectLength).toBe(2)
+  })
+
+  it('calculates the start offset for a dependent task', () => {
+    const taskA: Task = {
+      id: 'T-A',
+      title: 'T-A',
+      days: 3,
+      startOffset: 0,
+      anyOf: new Set(['tag']),
+      blockedBy: new Set(),
+      blocks: new Set(),
+      assigned: null,
+    }
+    const taskB: Task = {
+      id: 'T-B',
+      title: 'T-B',
+      days: 2,
+      startOffset: 0,
+      anyOf: new Set(['tag']),
+      blockedBy: new Set(['T-A']),
+      blocks: new Set(),
+      assigned: null,
+    }
+    const resourceA: Resource = { id: 'R-A', tags: new Set(['tag']) }
+    const resourceB: Resource = { id: 'R-B', tags: new Set(['tag']) }
+
+    const result = assignResourcesToTasks(
+      createProject([taskA, taskB], [resourceA, resourceB]),
+    )
+
+    expect(taskA.startOffset).toBe(0)
+    expect(taskB.startOffset).toBe(taskA.days)
+    expect(result.totalProjectLength).toBe(5)
   })
 })

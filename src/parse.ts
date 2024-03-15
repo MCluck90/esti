@@ -85,6 +85,7 @@ export const parseConfig = (
         id,
         title,
         days,
+        startOffset: 0,
         anyOf,
         blockedBy,
         blocks: new Set(),

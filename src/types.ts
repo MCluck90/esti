@@ -35,6 +35,7 @@ export interface Task {
   id: string
   title: string
   days: number
+  startOffset: number
   anyOf: Set<string>
   blockedBy: Set<string>
   blocks: Set<string>
