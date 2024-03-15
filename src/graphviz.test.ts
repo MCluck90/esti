@@ -72,9 +72,13 @@ describe('toGraphvizIR', () => {
 
     const project = createProject(tasks, [resourceA, resourceB, resourceC])
     const ir = toGraphvizIR(project)
-    expect(ir.nodes.length).toBe(3)
+    expect(ir.nodes.length).toBe(4)
 
     for (const node of ir.nodes) {
+      if (node.id === '___END') {
+        continue
+      }
+
       const task = tasks.find((task) => task.id === node.id)
       if (!task) {
         throw new Error(`No task found for node ${node.id}`)
@@ -124,13 +128,71 @@ describe('toGraphvizIR', () => {
 
     const project = createProject(tasks, [resourceA, resourceB, resourceC])
     const ir = toGraphvizIR(project)
-    expect(ir.edges.length).toBe(2)
+    expect(ir.edges.length).toBe(3)
 
     expect(
       ir.edges.find((edge) => edge.from === 'T-0' && edge.to === 'T-1'),
     ).toBeTruthy()
     expect(
       ir.edges.find((edge) => edge.from === 'T-1' && edge.to === 'T-2'),
+    ).toBeTruthy()
+  })
+
+  it('includes an end node which is connected to leaf nodes', () => {
+    const resourceA: Resource = { id: 'R-A', tags: new Set() }
+    const resourceB: Resource = { id: 'R-B', tags: new Set() }
+    const resourceC: Resource = { id: 'R-C', tags: new Set() }
+    const taskA: Task = {
+      id: 'T-0',
+      title: 'Task A',
+      days: 0,
+      startOffset: 0,
+      anyOf: new Set(),
+      blockedBy: new Set(),
+      blocks: new Set(),
+      assigned: resourceA,
+    }
+    const taskB: Task = {
+      id: 'T-1',
+      title: 'Task B',
+      days: 0,
+      startOffset: 0,
+      anyOf: new Set(),
+      blockedBy: new Set(['T-0']),
+      blocks: new Set(),
+      assigned: resourceB,
+    }
+    const taskC: Task = {
+      id: 'T-2',
+      title: 'Task C',
+      days: 0,
+      startOffset: 0,
+      anyOf: new Set(),
+      blockedBy: new Set(['T-1']),
+      blocks: new Set(),
+      assigned: resourceC,
+    }
+    const taskD: Task = {
+      id: 'T-3',
+      title: 'Task D',
+      days: 0,
+      startOffset: 0,
+      anyOf: new Set(),
+      blockedBy: new Set(['T-0']),
+      blocks: new Set(),
+      assigned: resourceA,
+    }
+    const tasks = [taskA, taskB, taskC, taskD]
+
+    const project = createProject(tasks, [resourceA, resourceB, resourceC])
+    const ir = toGraphvizIR(project)
+    expect(ir.edges.length).toBe(5)
+
+    expect(
+      ir.edges.find((edge) => edge.from === 'T-2' && edge.to === '___END'),
+    ).toBeTruthy()
+    expect(
+      ir.edges.find((edge) => edge.from === 'T-3' && edge.to === '___END'),
     ).toBeTruthy()
   })
 })

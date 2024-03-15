@@ -2,6 +2,7 @@ digraph G {
   rankdir="LR"
   label="Todo App"
 
+  "___END" [label="End", shape="record"]
   "TODO-0001" [label="TODO-0001|Create an empty repository|Assigned: Lorem", shape="record"]
   "TODO-0002" [label="TODO-0002|Create scaffolding for the frontend|Assigned: Dolor", shape="record"]
   "TODO-0003" [label="TODO-0003|Create scaffolding for the backend|Assigned: Ipsum", shape="record"]
@@ -25,8 +26,13 @@ digraph G {
   "TODO-0004" -> "TODO-0005"
   "TODO-0004" -> "TODO-0006"
   "TODO-0004" -> "TODO-0007"
+  "TODO-0005" -> "___END"
+  "TODO-0006" -> "___END"
+  "TODO-0007" -> "___END"
   "TODO-0008" -> "TODO-0009"
   "TODO-0009" -> "TODO-0013"
   "TODO-0010" -> "TODO-0011"
+  "TODO-0011" -> "___END"
   "TODO-0012" -> "TODO-0013"
+  "TODO-0013" -> "___END"
 }

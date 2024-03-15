@@ -18,8 +18,13 @@ export interface GraphvizIR {
 }
 
 export const toGraphvizIR = (project: Project): GraphvizIR => {
-  const nodes: GraphvizIRNode[] = []
+  // Include an end node to connect the last pieces together
+  const nodes: GraphvizIRNode[] = [
+    { id: '___END', attributes: { label: 'End', shape: 'record' } },
+  ]
   const edges: GraphvizIREdge[] = []
+
+  const leafNodes: GraphvizIRNode[] = []
 
   for (const task of project.tasks.values()) {
     nodes.push({
@@ -30,8 +35,12 @@ export const toGraphvizIR = (project: Project): GraphvizIR => {
       },
     })
 
-    for (const other of task.blocks) {
-      edges.push({ from: task.id, to: other })
+    if (task.blocks.size === 0) {
+      edges.push({ from: task.id, to: '___END' })
+    } else {
+      for (const other of task.blocks) {
+        edges.push({ from: task.id, to: other })
+      }
     }
   }
 
