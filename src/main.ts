@@ -28,7 +28,7 @@ for (const task of project.tasks.values()) {
   if (task.assigned === null) {
     console.error(`[ERROR] No resource assigned to ${task.id}`)
   } else {
-    console.log(task.id)
+    console.log(`[${task.id}]`, task.title)
     console.log('\tAssigned to:', task.assigned.id)
     console.log('\tStarts on day:', task.startOffset)
     console.log('')
