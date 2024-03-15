@@ -1,15 +1,19 @@
 import fs from 'fs'
-import { ProjectConfig, Resource, Task } from './types'
+import path from 'path'
+import { ProjectConfig } from './types'
 import { parseConfig } from './parse'
 import { assignResourcesToTasks } from './assignment'
+import { toGraphvizDOT, toGraphvizIR } from './graphviz'
 
-const filePath = process.argv[2]
-if (!filePath) {
+const projectFilePath = process.argv[2]
+if (!projectFilePath) {
   console.error('Usage: npm start [path-to-project]')
   process.exit(1)
 }
 
-const config: ProjectConfig = JSON.parse(fs.readFileSync(filePath).toString())
+const config: ProjectConfig = JSON.parse(
+  fs.readFileSync(projectFilePath).toString(),
+)
 const result = parseConfig(config)
 if (!result.ok) {
   for (const error of result.error) {
@@ -23,14 +27,13 @@ const { totalProjectLength } = assignResourcesToTasks(project)
 
 console.log(project.title)
 console.log('Total Days:', totalProjectLength)
-console.log()
-for (const task of project.tasks.values()) {
-  if (task.assigned === null) {
-    console.error(`[ERROR] No resource assigned to ${task.id}`)
-  } else {
-    console.log(`[${task.id}]`, task.title)
-    console.log('\tAssigned to:', task.assigned.id)
-    console.log('\tStarts on day:', task.startOffset)
-    console.log('')
-  }
-}
+
+const projectFileName = path.basename(projectFilePath, '.json')
+const dotFilePath = path.join(
+  path.dirname(projectFilePath),
+  `${projectFileName}.dot`,
+)
+
+const graphvizDOT = toGraphvizDOT(toGraphvizIR(project))
+fs.writeFileSync(dotFilePath, graphvizDOT)
+console.log('Graphviz DOT file written to:', dotFilePath)

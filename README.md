@@ -3,6 +3,9 @@
 Quickly estimate projects. Given a project specification, it will give you a solution to assigning work and an estimated
 total time to execute the project.
 
+Outputs the total length of the project and a [Graphviz](https://graphviz.org/) DOT file showing the dependencies and
+assignments.
+
 ## Getting Started
 
 ```sh

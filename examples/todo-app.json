@@ -46,13 +46,13 @@
       "title": "Endpoint: create a todo",
       "days": 2,
       "anyOf": ["Backend"],
-      "blockedBy": ["TODO-0003"]
+      "blockedBy": ["TODO-0004"]
     },
     "TODO-0007": {
       "title": "Endpoint: update a todo",
       "days": 2,
       "anyOf": ["Backend"],
-      "blockedBy": ["TODO-0003"]
+      "blockedBy": ["TODO-0004"]
     },
     "TODO-0008": {
       "title": "Create hook for getting all todos with mocks",
