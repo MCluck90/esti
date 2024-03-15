@@ -85,6 +85,10 @@ export const parseST = (input: string): Result<ProjectConfig, Error[]> => {
     }
   }
 
+  if (errors.length > 0) {
+    return Result.Err(errors)
+  }
+
   return Result.Ok({
     title,
     resources,
