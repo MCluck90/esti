@@ -87,17 +87,23 @@ export const parseConfig = (
         days,
         anyOf,
         blockedBy,
+        blocks: new Set(),
+        assigned: null,
       })
     }
   }
 
-  // Check for invalid dependencies
   for (const task of tasks.values()) {
-    for (const dependency of task.blockedBy) {
-      if (!tasks.has(dependency)) {
+    // Check for invalid dependencies
+    for (const dependencyId of task.blockedBy) {
+      const dependency = tasks.get(dependencyId)
+      if (!dependency) {
         errors.push(
-          `[Task: ${task.id}] Blocked by non-existent task: ${dependency}`,
+          `[Task: ${task.id}] Blocked by non-existent task: ${dependencyId}`,
         )
+      } else {
+        // Create bi-directional blocking connections
+        dependency.blocks.add(task.id)
       }
     }
   }

@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { ProjectConfig } from './types'
+import { ProjectConfig, Resource, Task } from './types'
 import { parseConfig } from './parse'
 
 const filePath = process.argv[2]
@@ -18,4 +18,10 @@ if (!result.ok) {
 }
 
 const project = result.value
-console.log(project)
+const availableResources = new Set<Resource>()
+const resourceCooldown = new Map<string, [Resource, number]>()
+const unassigned = new Set<Task>(
+  Array.from(project.tasks.values()).filter(
+    (task) => task.blockedBy.size === 0,
+  ),
+)

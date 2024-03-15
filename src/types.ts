@@ -18,7 +18,7 @@ export interface TaskConfig {
 /**
  * Only to be used when you have a map and you are only accessing it with known good keys
  */
-export type VerifiedMap<K, V> = Map<K, V> & { get(key: K): V }
+export type VerifiedMap<K, V> = Omit<Map<K, V>, 'get'> & { get(key: K): V }
 
 export interface Project {
   title: string
@@ -37,6 +37,8 @@ export interface Task {
   days: number
   anyOf: Set<string>
   blockedBy: Set<string>
+  blocks: Set<string>
+  assigned: Resource | null
 }
 
 export type Result<T, E> = { ok: true; value: T } | { ok: false; error: E }
