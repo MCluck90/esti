@@ -76,7 +76,7 @@
       "title": "Enable creating new todos",
       "days": 2,
       "anyOf": ["Frontend"],
-      "blockedBy": ["TODO-0010", "TODO-0010"]
+      "blockedBy": ["TODO-0009", "TODO-0010"]
     },
     "TODO-0012": {
       "title": "Create hook for updating a todo with mocks",

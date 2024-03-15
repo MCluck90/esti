@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import { parseConfig } from './parse'
-import { Project, ProjectConfig, Result } from './types'
+import { parseConfig } from '.'
+import { Project, ProjectConfig, Result } from '../types'
 
 function assertSuccessfulParse(
   result: Result<Project, string[]>,

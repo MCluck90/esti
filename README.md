@@ -20,7 +20,9 @@ npm start examples/todo-app.json
 
 For the most up-to-date information, check out [the examples](./examples/).
 
-A minimal project can be written like this:
+Projects can be written in [JSON](./examples/todo-app.json) or a custom format called [ST](./examples/todo-app.st)
+
+A minimal JSON project can be written like this:
 
 ```json
 {
@@ -38,6 +40,22 @@ A minimal project can be written like this:
       "blockedBy": []
     }
   }
+}
+```
+
+or the equivalent ST:
+
+```
+title: `My Project`
+
+resource Me {
+  tags: `Some tag`
+}
+
+task `Task ID` {
+  title: `Name of the task`
+  days: 1
+  anyOf: `Some tag`
 }
 ```
 
@@ -116,5 +134,24 @@ completed.
       "blockedBy": ["TASK-1", "TASK-2"]
     }
   }
+}
+```
+
+Declaring dependencies in ST works the same way gives you a different way of writing simple dependencies.
+
+```
+task `TASK-1` {
+  // ...
+
+  > `TASK-3` {
+    // ...
+    // Automatically blocked by `TASK-1` but can other blockers
+    // `blockedBy` is an optional attribute in ST
+    blockedBy: `TASK-2`
+  }
+}
+
+task `TASK-2` {
+  // ...
 }
 ```

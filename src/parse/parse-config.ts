@@ -5,7 +5,7 @@ import {
   Result,
   Task,
   VerifiedMap,
-} from './types'
+} from '../types'
 
 export const parseConfig = (
   config: ProjectConfig,

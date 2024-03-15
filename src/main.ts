@@ -1,39 +1,70 @@
 import fs from 'fs'
 import path from 'path'
 import { ProjectConfig } from './types'
-import { parseConfig } from './parse'
+import { SemanticError, parseConfig, parseST } from './parse'
 import { assignResourcesToTasks } from './assignment'
 import { toGraphvizDOT, toGraphvizIR } from './graphviz'
 
-const projectFilePath = process.argv[2]
-if (!projectFilePath) {
+const fileArg = process.argv[2]
+if (!fileArg) {
   console.error('Usage: npm start [path-to-project]')
   process.exit(1)
 }
 
-const config: ProjectConfig = JSON.parse(
-  fs.readFileSync(projectFilePath).toString(),
-)
-const result = parseConfig(config)
-if (!result.ok) {
-  for (const error of result.error) {
-    console.error(error)
-  }
-  process.exit(1)
+if (path.extname(fileArg) === '.json') {
+  runFromConfigFile(fileArg)
+} else {
+  runFromSTFile(fileArg)
 }
 
-const project = result.value
-const { totalProjectLength } = assignResourcesToTasks(project)
+function runFromSTFile(stFilePath: string) {
+  const source = fs.readFileSync(stFilePath).toString()
+  const result = parseST(source)
+  if (!result.ok) {
+    for (const error of result.error) {
+      if (error instanceof SemanticError) {
+        console.log(
+          `${stFilePath}:${error.location.start.line}:${error.location.start.column}: ${error.message}`,
+        )
+      } else {
+        console.log(error)
+      }
+    }
+    process.exit(1)
+  }
 
-console.log(project.title)
-console.log('Total Days:', totalProjectLength)
+  runFromConfig(result.value, stFilePath)
+}
 
-const projectFileName = path.basename(projectFilePath, '.json')
-const dotFilePath = path.join(
-  path.dirname(projectFilePath),
-  `${projectFileName}.dot`,
-)
+function runFromConfigFile(configFilePath: string) {
+  const config: ProjectConfig = JSON.parse(
+    fs.readFileSync(configFilePath).toString(),
+  )
+  runFromConfig(config, configFilePath)
+}
 
-const graphvizDOT = toGraphvizDOT(toGraphvizIR(project))
-fs.writeFileSync(dotFilePath, graphvizDOT)
-console.log('Graphviz DOT file written to:', dotFilePath)
+function runFromConfig(config: ProjectConfig, filePath: string) {
+  const result = parseConfig(config)
+  if (!result.ok) {
+    for (const error of result.error) {
+      console.error(error)
+    }
+    process.exit(1)
+  }
+
+  const project = result.value
+  const { totalProjectLength } = assignResourcesToTasks(project)
+
+  console.log(project.title)
+  console.log('Total Days:', totalProjectLength)
+
+  const projectFileName = path.basename(path.basename(filePath, '.json'), '.st')
+  const dotFilePath = path.join(
+    path.dirname(filePath),
+    `${projectFileName}.dot`,
+  )
+
+  const graphvizDOT = toGraphvizDOT(toGraphvizIR(project))
+  fs.writeFileSync(dotFilePath, graphvizDOT)
+  console.log('Graphviz DOT file written to:', dotFilePath)
+}

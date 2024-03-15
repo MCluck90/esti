@@ -5,23 +5,30 @@ digraph G {
   "___END" [label="End", shape="record"]
   "TODO-0001" [label="TODO-0001|Create an empty repository|Assigned: Lorem", shape="record"]
   "TODO-0002" [label="TODO-0002|Create scaffolding for the frontend|Assigned: Dolor", shape="record"]
-  "TODO-0003" [label="TODO-0003|Create scaffolding for the backend|Assigned: Ipsum", shape="record"]
-  "TODO-0004" [label="TODO-0004|Setup the todos database|Assigned: Ipsum", shape="record"]
-  "TODO-0005" [label="TODO-0005|Endpoint: get all todos|Assigned: Ipsum", shape="record"]
-  "TODO-0006" [label="TODO-0006|Endpoint: create a todo|Assigned: Ipsum", shape="record"]
-  "TODO-0007" [label="TODO-0007|Endpoint: update a todo|Assigned: Dolor", shape="record"]
   "TODO-0008" [label="TODO-0008|Create hook for getting all todos with mocks|Assigned: Lorem", shape="record"]
   "TODO-0009" [label="TODO-0009|Show list of all todos|Assigned: Dolor", shape="record"]
   "TODO-0010" [label="TODO-0010|Create hook for creating a todo with mocks|Assigned: Dolor", shape="record"]
   "TODO-0011" [label="TODO-0011|Enable creating new todos|Assigned: Lorem", shape="record"]
   "TODO-0012" [label="TODO-0012|Create hook for updating a todo with mocks|Assigned: Lorem", shape="record"]
   "TODO-0013" [label="TODO-0013|Enable editing existing todos|Assigned: Lorem", shape="record"]
+  "TODO-0003" [label="TODO-0003|Create scaffolding for the backend|Assigned: Ipsum", shape="record"]
+  "TODO-0004" [label="TODO-0004|Setup the todos database|Assigned: Ipsum", shape="record"]
+  "TODO-0005" [label="TODO-0005|Endpoint: get all todos|Assigned: Ipsum", shape="record"]
+  "TODO-0006" [label="TODO-0006|Endpoint: create a todo|Assigned: Ipsum", shape="record"]
+  "TODO-0007" [label="TODO-0007|Endpoint: update a todo|Assigned: Dolor", shape="record"]
 
   "TODO-0001" -> "TODO-0002"
   "TODO-0001" -> "TODO-0003"
   "TODO-0002" -> "TODO-0008"
   "TODO-0002" -> "TODO-0010"
   "TODO-0002" -> "TODO-0012"
+  "TODO-0008" -> "TODO-0009"
+  "TODO-0009" -> "TODO-0011"
+  "TODO-0009" -> "TODO-0013"
+  "TODO-0010" -> "___END"
+  "TODO-0011" -> "___END"
+  "TODO-0012" -> "___END"
+  "TODO-0013" -> "___END"
   "TODO-0003" -> "TODO-0004"
   "TODO-0004" -> "TODO-0005"
   "TODO-0004" -> "TODO-0006"
@@ -29,10 +36,4 @@ digraph G {
   "TODO-0005" -> "___END"
   "TODO-0006" -> "___END"
   "TODO-0007" -> "___END"
-  "TODO-0008" -> "TODO-0009"
-  "TODO-0009" -> "TODO-0013"
-  "TODO-0010" -> "TODO-0011"
-  "TODO-0011" -> "___END"
-  "TODO-0012" -> "TODO-0013"
-  "TODO-0013" -> "___END"
 }
